@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../public/images/logo.png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/2db8913779.js" crossorigin="anonymous"></script>
+    <link href="../public/stylesheets/customPage.css" rel="stylesheet">
+    <title>Your Page in Public</title>
+</head>
+<body class="bg-primary text-bg-primary">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 bg-light m-3 rounded-4" id="mainNav">
+        <div class="container">
+            <div class="">
+                <a class="navbar-brand" href="#" onclick="showPage('page')"><i class="fa-solid fa-id-badge pe-2"></i>PAGE</a>
+                <a class="navbar-brand" href="#" onclick="showPage('style')"><i class="fa-solid fa-pencil pe-2"></i>STYLE</a>
+                <a class="navbar-brand" href="#" onclick="showPage('stats')"><i class="fa-solid fa-chart-line pe-2"></i>STATS</a>
+                <a class="navbar-brand" href="#" onclick="showPage('settings')"><i class="fa-solid fa-gear pe-2"></i>SETTINGS</a>
+            </div>
+            <a class="btn btn-primary btn-xl rounded-4" href="#">DEPLOY</a>
+        </div>
+    </nav>
+
+    <div class="container-fluid h-100 d-flex flex-column mt-7">
+        <div id="pageContent" class="row flex-grow-1">
+            <div class="col-md-6 left-panel mb-4">
+                <div class="mb-5">
+                    <form id="userForm">
+                        <div class="mb-3">
+                            <label for="userPhoto" class="form-label">Your Pic</label>
+                            <input type="file" class="form-control" id="userPhoto" accept="image/*" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userDescription" class="form-label">Short Description</label>
+                            <textarea class="form-control" id="userDescription" rows="4" required></textarea>
+                        </div>
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-primary">Add Your Informations</button>
+                        </div>
+                    </form>
+                </div>
+
+                <form id="companyForm">
+                    <div class="mb-3">
+                        <label for="companyName" class="form-label">Company Name</label>
+                        <input type="text" class="form-control" id="companyName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="companyDescription" class="form-label">Company Description</label>
+                        <textarea class="form-control" id="companyDescription" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="companyLink" class="form-label">Company WebSite</label>
+                        <input type="url" class="form-control" id="companyLink" required>
+                    </div>
+                    <div class="text-center mt-5">
+                        <button type="submit" class="btn btn-primary">Add Company</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 right-panel d-flex justify-content-center">
+                <div class="preview-phone p-3 rounded">
+                    <div id="previewContent" class="border p-2 rounded">
+                        <div id="userProfilePreview" class="mb-4 d-flex align-items-center">
+                            <img id="profilePhoto" src="" alt="Foto do Usuário" class="img-fluid d-none" width="100">
+                            <p id="profileDescription" class="w-100 text-center me-5"></p>
+                        </div>
+                        <ul id="companyList" class="list-unstyled"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="styleContent" class="row flex-grow-1 d-none">
+            <div class="col-md-6 left-panel mb-4">
+                <div class="mb-5">
+                    <form id="styleForm">
+                        <div class="mb-3">
+                            <label for="backgroundColor" class="form-label">Background Color</label>
+                            <input type="color" class="form-control" id="backgroundColor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fontColor" class="form-label">Font Color</label>
+                            <input type="color" class="form-control" id="fontColor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="linkColor" class="form-label">Link Color</label>
+                            <input type="color" class="form-control" id="linkColor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hoverColor" class="form-label">Hover Background Color</label>
+                            <input type="color" class="form-control" id="hoverColor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fontFamily" class="form-label">Font Family</label>
+                            <select class="form-control" id="fontFamily" required>
+                                <option value="Arial">Arial</option>
+                                <option value="Verdana">Verdana</option>
+                                <option value="Helvetica">Helvetica</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Courier New">Courier New</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Palatino">Palatino</option>
+                                <option value="Garamond">Garamond</option>
+                                <option value="Bookman">Bookman</option>
+                                <option value="Comic Sans MS">Comic Sans MS</option>
+                                <option value="Trebuchet MS">Trebuchet MS</option>
+                                <option value="Arial Black">Arial Black</option>
+                                <option value="Impact">Impact</option>
+                                <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                                <option value="Tahoma">Tahoma</option>
+                                <option value="Century Gothic">Century Gothic</option>
+                                <option value="Lucida Console">Lucida Console</option>
+                            </select>
+                        </div>
+                        
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-primary">Apply Styles</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 right-panel d-flex justify-content-center">
+                <div class="preview-phone p-3 rounded">
+                    <div id="stylePreviewContent" class="border p-2 rounded">
+                        <div id="userProfilePreviewStyle" class="mb-4 d-flex align-items-center">
+                            <img id="profilePhotoStyle" src="" alt="Foto do Usuário" class="img-fluid d-none" width="100">
+                            <p id="profileDescriptionStyle" class="w-100 text-center me-5"></p>
+                        </div>
+                        <ul id="companyListStyle" class="list-unstyled"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsContent" class="row flex-grow-1 d-none">
+            <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <canvas id="statsChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <div id="settingsContent" class="row flex-grow-1 d-none">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-center">
+                    <nav class="navbar navbar-expand-lg navbar-light py-3 bg-light m-3 rounded-4 mw-1 secondary-navbar">
+                        <div class="container">
+                            <a class="navbar-brand" href="#" onclick="showSettingsPage('domain')">Domain</a>
+                            <a class="navbar-brand" href="#" onclick="showSettingsPage('billing')">Billing</a>
+                        </div>
+                    </nav>
+                </div>
+                <div id="settingsDomainContent" class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 mb-3 bg-light p-3 rounded mb-5 mt-3">
+                            <h2>PageInPublic Domain</h2>
+                            <p class="domain-text">
+                                <span class="domain-prefix">pagein.public/</span>
+                                <span class="domain-user">user-name</span>
+                            </p>
+                        </div>
+                        <div class="col-md-8 mb-3 bg-light p-3 rounded">
+                            <label for="customDomain" class="form-label">Custom Domain</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="customDomain" placeholder="Enter your custom domain">
+                                <button class="btn btn-primary" id="deployButton">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="settingsBillingContent" class="container-fluid d-none">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 mb-3 bg-light p-3 rounded mb-5 mt-3 text-center">
+                            <p class="plan-text">Your Plan: <span id="currentPlan">Free</span></p>
+                            <button class="btn btn-primary" id="managePlanButton">Manage your plan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>                
+    </div>
+
+    <footer class="py-5 bg-light">
+        <div class="px-4 px-lg-5">
+            <div class="small text-center text-muted mb-0">
+                <p>Copyrights &copy; 2024 All Rights Reserved by <a href="">WeDevelops</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../public/javascripts/script.js"></script>
+</body>
+</html>
