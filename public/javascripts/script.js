@@ -48,57 +48,53 @@ function showSettingsPage(subPage) {
     });
 }
 
+// Inicializar com a aba PAGE aberta
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("JavaScript is working!");
-    // Dados de exemplo para os últimos 7 dias
-    const siteVisits = [0, 0, 0, 0, 0, 0, 0];
-    const linkClicks = [0, 0, 0, 0, 0, 0, 0];
-
-    // Atualiza o gráfico
-    function updateStatsChart() {
-        const ctx = document.getElementById('statsChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
-                datasets: [
-                    {
-                        label: 'Visits',
-                        data: siteVisits,
-                        borderColor: 'rgba(75, 192, 192, 1)'
-                    },
-                    {
-                        label: 'Clicks',
-                        data: linkClicks,
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        fill: true,
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    },
-                },
-                scales: {
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Count',
-                        },
-                    }
-                }
-            }
-        });
-    }
-
-    // Carregar o gráfico ao abrir a aba STATS
-    updateStatsChart();
+    showPage('page');
+    loadUserCustomizations(); // Carregar as customizações do usuário ao carregar a página
 });
+
+// Função para carregar e aplicar as customizações do usuário
+function loadUserCustomizations() {
+    fetch('/user/customizations')
+        .then(response => response.json())
+        .then(data => {
+            applyUserCustomizations(data);
+        })
+        .catch(error => console.error('Error loading user customizations:', error));
+}
+
+// Função para aplicar as customizações do usuário
+function applyUserCustomizations(customizations) {
+    const profilePhoto = document.getElementById('profilePhoto');
+    const profileDescription = document.getElementById('profileDescription');
+    const pagePreviewContent = document.getElementById('previewContent');
+
+    if (customizations.photo) {
+        profilePhoto.src = customizations.photo;
+        profilePhoto.classList.remove('d-none');
+    }
+    profileDescription.textContent = customizations.description || '';
+
+    pagePreviewContent.style.backgroundColor = customizations.backgroundColor || '#fff';
+    pagePreviewContent.style.color = customizations.fontColor || '#000';
+    pagePreviewContent.style.fontFamily = customizations.fontFamily || 'Arial';
+
+    const companyLinks = document.querySelectorAll('.company-link');
+    companyLinks.forEach(link => {
+        link.style.color = customizations.linkColor || '#000';
+    });
+
+    const companyListItems = document.querySelectorAll('.company-item');
+    companyListItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            item.style.backgroundColor = customizations.hoverColor || '#f0f0f0';
+        });
+        item.addEventListener('mouseleave', function() {
+            item.style.backgroundColor = 'transparent';
+        });
+    });
+}
 
 // Função para aplicar estilos ao preview da aba PAGE
 function applyStylesToPagePreview() {
@@ -121,7 +117,7 @@ function applyStylesToPagePreview() {
     const hoverColor = document.getElementById('hoverColor').value;
     const companyListItems = document.querySelectorAll('.company-item-style');
     companyListItems.forEach(function(item) {
-        item.style.backgroundColor = 'transparent'; // Limpa qualquer cor de hover anterior
+        item.style.backgroundColor = 'transparent';
         item.addEventListener('mouseenter', function() {
             item.style.backgroundColor = hoverColor;
         });
@@ -130,7 +126,6 @@ function applyStylesToPagePreview() {
         });
     });
 
-    // Aplica o estilo de hover na aba PAGE
     const pageListItems = document.querySelectorAll('.company-item');
     pageListItems.forEach(function(item) {
         item.addEventListener('mouseenter', function() {
@@ -141,7 +136,6 @@ function applyStylesToPagePreview() {
         });
     });
 }
-
 
 // Função para adicionar informações do usuário
 document.getElementById('userForm').addEventListener('submit', function(event) {
@@ -233,9 +227,26 @@ document.getElementById('styleForm').addEventListener('submit', function(event) 
     applyStylesToPagePreview();
 });
 
-// Event listener para iniciar na página PAGE
-document.addEventListener('DOMContentLoaded', function() {
-    showPage('page');
+document.getElementById('styleForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/user/customize', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 });
 
 document.getElementById('deployButton').addEventListener('click', function() {
@@ -250,26 +261,6 @@ document.getElementById('deployButton').addEventListener('click', function() {
     customDomainInput.value = '';
 });
 
-function showSettingsPage(page) {
-    const domainContent = document.getElementById('settingsDomainContent');
-    const billingContent = document.getElementById('settingsBillingContent');
-    const domainNavItem = document.querySelector('.secondary-navbar .navbar-brand[href="#"][onclick="showSettingsPage(\'domain\')"]');
-    const billingNavItem = document.querySelector('.secondary-navbar .navbar-brand[href="#"][onclick="showSettingsPage(\'billing\')"]');
-
-    if (page === 'domain') {
-        domainContent.classList.remove('d-none');
-        billingContent.classList.add('d-none');
-        domainNavItem.classList.add('active');
-        billingNavItem.classList.remove('active');
-    } else if (page === 'billing') {
-        billingContent.classList.remove('d-none');
-        domainContent.classList.add('d-none');
-        billingNavItem.classList.add('active');
-        domainNavItem.classList.remove('active');
-    }
-}
-
-// Função para definir o plano atual
 function setCurrentPlan(plan) {
     const currentPlanSpan = document.getElementById('currentPlan');
     currentPlanSpan.textContent = plan;

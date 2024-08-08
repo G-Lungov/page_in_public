@@ -1,42 +1,38 @@
-const User = require('../models/user');
-const bcrypt = require('bcrypt');
+const User = require('../models/User');
+const path = require('path');
 
-exports.register = async (req, res) => {
+exports.getUserProfile = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ username, email, password: hashedPassword });
-        res.status(201).json(user);
+        const username = req.params.username;
+        const user = await User.findOne({ where: { username } });
+
+        if (!user) {
+            return res.status(404).sendFile(path.join(__dirname, '../views/404.html'));
+        }
+
+        res.render('userProfile', { user, customizations: user.customizations });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error(error);
+        res.status(500).sendFile(path.join(__dirname, '../views/500.html'));
     }
 };
 
-exports.login = async (req, res) => {
+exports.updateCustomizations = async (req, res) => {
     try {
-        const { username } = req.params;
-        const user = await User.findOne({ where: { username } });
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        res.json(user);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+        const username = req.params.username;
+        const customizations = req.body.customizations;
 
-exports.customizeProfile = async (req, res) => {
-    try {
-        const { username } = req.params;
-        const { customizations } = req.body;
         const user = await User.findOne({ where: { username } });
         if (!user) {
-            return res.status(404).json({ error: "User not found" });
+            return res.status(404).json({ message: 'User not found' });
         }
+
         user.customizations = customizations;
         await user.save();
-        res.json(user);
+
+        res.json({ message: 'Customizations updated successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred while updating customizations' });
     }
 };
